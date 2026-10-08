@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aptitude Preparation Tracker</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#6b7280;--line:#e5e7eb;--primary:#4f46e5;--primary2:#6366f1;--green:#16a34a;--orange:#ea580c}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,select{font:inherit}.app{display:flex;min-height:100vh}.sidebar{width:245px;background:#111827;color:#fff;padding:24px 16px;position:fixed;inset:0 auto 0 0}.brand{font-size:21px;font-weight:800;padding:8px 10px 25px}.brand span{color:#818cf8}.nav button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px 14px;border-radius:10px;margin:3px 0;cursor:pointer}.nav button.active,.nav button:hover{background:#272f43;color:#fff}.main{margin-left:245px;width:calc(100% - 245px);padding:30px;max-width:1400px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.top h1{margin:0;font-size:28px}.date{color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,.03)}.stat-label{color:var(--muted);font-size:13px}.stat{font-size:28px;font-weight:800;margin-top:7px}.progress-wrap{height:9px;background:#eef0f5;border-radius:20px;overflow:hidden;margin-top:12px}.progress{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:20px}.section{margin-top:22px}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.section-title h2{margin:0;font-size:20px}.section-title span{color:var(--muted);font-size:13px}.subject-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.subject{cursor:pointer}.subject h3{margin:0 0 8px;font-size:16px}.subject .pct{font-size:24px;font-weight:800}.timer-card{text-align:center}.timer{font-size:52px;font-weight:800;letter-spacing:2px;margin:12px 0}.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.primary,.secondary,.danger{border:0;border-radius:10px;padding:11px 17px;cursor:pointer;font-weight:700}.primary{background:var(--primary);color:white}.secondary{background:#eef0ff;color:#3730a3}.danger{background:#fee2e2;color:#b91c1c}.select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:white;margin:8px 0 14px}.page{display:none}.page.active{display:block}.syllabus-section{margin-bottom:18px}.topic-group{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}.group-head{padding:15px 18px;font-weight:750;background:#fafbff;border-bottom:1px solid var(--line)}.topic{display:flex;align-items:center;gap:11px;padding:11px 18px;border-bottom:1px solid #f0f1f4}.topic:last-child{border-bottom:0}.topic input{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}.topic label{cursor:pointer;flex:1}.topic.done label{text-decoration:line-through;color:#9ca3af}.topic-time{font-size:12px;color:var(--muted)}.mini-progress{font-size:12px;color:var(--muted);font-weight:500}.history-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line)}.empty{color:var(--muted);padding:20px;text-align:center}.goal{display:flex;gap:10px;align-items:center}.goal input{width:80px;padding:9px;border:1px solid var(--line);border-radius:8px}.days{display:flex;gap:7px;margin-top:15px}.day{width:30px;height:30px;border-radius:50%;background:#eef0f5;display:grid;place-items:center;font-size:11px;color:var(--muted)}.day.done{background:#dcfce7;color:#15803d}.notice{padding:12px 14px;border-radius:10px;background:#eef2ff;color:#3730a3;margin-top:12px;font-size:13px}
+@media(max-width:1000px){.grid,.subject-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.sidebar{position:static;width:100%;height:auto}.app{display:block}.main{margin-left:0;width:100%;padding:18px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.grid,.subject-grid{grid-template-columns:1fr}.top{align-items:flex-start;gap:10px;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">Apti<span>Track</span></div>
+  <div class="nav">
+    <button class="active" data-page="dashboard">🏠 Dashboard</button>
+    <button data-page="syllabus">☑️ Syllabus</button>
+    <button data-page="timer">⏱️ Study Timer</button>
+    <button data-page="progress">📊 Progress</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="top"><div><h1 id="pageTitle">Dashboard</h1><div class="date" id="today"></div></div></div>
+
+  <section id="dashboard" class="page active">
+    <div class="grid">
+      <div class="card"><div class="stat-label">Overall Progress</div><div class="stat" id="overallPct">0%</div><div class="progress-wrap"><div class="progress" id="overallBar"></div></div></div>
+      <div class="card"><div class="stat-label">Topics Completed</div><div class="stat" id="completedCount">0 / 0</div></div>
+      <div class="card"><div class="stat-label">Total Study Time</div><div class="stat" id="totalTime">0h 0m</div></div>
+      <div class="card"><div class="stat-label">Current Streak</div><div class="stat" id="streak">0 days</div></div>
+    </div>
+    <div class="section"><div class="section-title"><h2>Section Progress</h2><span>Click a section to open its checklist</span></div><div class="subject-grid" id="subjectCards"></div></div>
+    <div class="section">
+      <div class="card timer-card">
+        <div class="stat-label">Today's Study Goal</div>
+        <div class="stat"><span id="todayTime">0h 0m</span> / <span id="goalText">3h</span></div>
+        <div class="progress-wrap"><div class="progress" id="todayBar"></div></div>
+        <div class="controls" style="margin-top:16px"><button class="primary" onclick="showPage('timer')">Start Study Timer</button><button class="secondary" onclick="showPage('progress')">View Progress</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="syllabus" class="page">
+    <div id="syllabusContainer"></div>
+  </section>
+
+  <section id="timer" class="page">
+    <div class="card timer-card">
+      <div class="stat-label">Select what you are studying</div>
+      <select class="select" id="timerTopic"></select>
+      <div class="timer" id="timerDisplay">00:00:00</div>
+      <div class="controls">
+        <button class="primary" id="startBtn" onclick="toggleTimer()">Start</button>
+        <button class="danger" onclick="stopTimer()">Stop & Save</button>
+        <button class="secondary" onclick="resetTimer()">Reset</button>
+      </div>
+      <div class="notice">Your study time is saved automatically in this browser.</div>
+    </div>
+    <div class="section"><div class="card"><div class="section-title"><h2>Recent Sessions</h2></div><div id="recentSessions"></div></div></div>
+  </section>
+
+  <section id="progress" class="page">
+    <div class="grid">
+      <div class="card"><div class="stat-label">Today</div><div class="stat" id="pToday">0h 0m</div></div>
+      <div class="card"><div class="stat-label">This Week</div><div class="stat" id="pWeek">0h 0m</div></div>
+      <div class="card"><div class="stat-label">All Time</div><div class="stat" id="pAll">0h 0m</div></div>
+      <div class="card"><div class="stat-label">Daily Goal</div><div class="stat" id="pGoal">3h</div></div>
+    </div>
+    <div class="section"><div class="card"><div class="section-title"><h2>Daily Goal</h2><span>Change anytime</span></div><div class="goal">Study for <input id="goalInput" type="number" min="15" step="15" value="180"> minutes per day <button class="primary" onclick="saveGoal()">Save</button></div><div class="days" id="weekDays"></div></div></div>
+    <div class="section"><div class="card"><div class="section-title"><h2>Section Progress</h2></div><div id="progressSections"></div></div></div>
+  </section>
+</main>
+</div>
+
+<script>
+const DATA={
+"Numerical Ability":{
+"Basic Arithmetic Foundation":["Number System","Natural Numbers, Integers, Fractions","Divisibility Rules","HCF & LCM","Simplification","BODMAS","Decimals","Fractions","Powers & Roots"],
+"Percentages & Ratios":["Percentages — basics","Percentage increase/decrease","Successive percentage","Ratio & Proportion","Direct & Inverse Proportion","Averages","Weighted Average"],
+"Commercial Mathematics":["Profit & Loss","Discount","Marked Price","Simple Interest","Compound Interest","Partnership"],
+"Time-Based Problems":["Time & Work","Work & Wages","Pipes & Cisterns","Time, Speed & Distance","Relative Speed","Trains","Boats & Streams"],
+"Other Important Arithmetic":["Mixtures & Allegations","Problems on Ages","Linear Equations","Basic Algebra"],
+"Data Interpretation":["Tables","Bar Graphs","Line Graphs","Pie Charts","Caselet DI","Percentage-based DI","Ratio-based DI","Average-based DI"],
+"Higher-Level Quant":["Permutation","Combination","Probability"]},
+"Verbal Ability":{
+"English Grammar":["Parts of Speech","Nouns","Pronouns","Verbs","Adjectives","Adverbs","Articles","Prepositions","Conjunctions","Subject-Verb Agreement","Tenses","Active & Passive Voice","Direct & Indirect Speech","Modals","Conditional Sentences"],
+"Grammar-Based Questions":["Error Detection","Sentence Correction","Sentence Improvement","Fill in the Blanks","Sentence Completion"],
+"Vocabulary":["Synonyms","Antonyms","One Word Substitution","Idioms & Phrases","Contextual Vocabulary","Commonly Confused Words"],
+"Reading & Arrangement":["Reading Comprehension","Passage-based Questions","Passage Recall","Sentence Arrangement","Para Jumbles","Paragraph Completion","Sentence Completion"],
+"TCS-Specific Verbal Preparation":["Sentence Completion","Passage Recall","Reading/Passage-based questions","Email Writing"]},
+"Reasoning Ability":{
+"Basic Reasoning":["Analogy","Classification","Odd One Out","Number Series","Alphabet Series","Alphanumeric Series"],
+"Coding & Relationships":["Coding-Decoding","Letter Coding","Number Coding","Mixed Coding","Blood Relations","Family Tree","Direction Sense"],
+"Ranking & Ordering":["Ranking","Order & Position","Comparison Problems"],
+"Logical Reasoning":["Syllogism","Venn Diagrams","Statement & Conclusion","Statement & Assumption","Statement & Argument","Cause & Effect","Assertion & Reason"],
+"Arrangements":["Linear Seating Arrangement","Circular Seating Arrangement","Floor-based Arrangement","Scheduling Arrangement","Ordering Arrangement"],
+"Puzzles":["Basic Puzzles","Linear Puzzles","Circular Puzzles","Selection Puzzles","Distribution Puzzles","Complex Logical Puzzles"],
+"Data-Based Reasoning":["Data Sufficiency","Logical Data Interpretation","Analytical Reasoning"]},
+"Advanced Quantitative & Reasoning":{
+"Advanced Quantitative":["Advanced Number System","Advanced Percentages","Advanced Ratio & Proportion","Advanced Averages","Advanced Profit & Loss","Advanced SI & CI","Advanced Time & Work","Advanced Pipes & Cisterns","Advanced Time-Speed-Distance","Advanced Trains","Advanced Boats & Streams","Advanced Mixtures","Advanced Algebra","Advanced Permutation & Combination","Advanced Probability","Advanced Data Interpretation","Caselet DI","Multi-step Quantitative Problems"],
+"Advanced Reasoning":["Complex Seating Arrangements","Complex Puzzles","Advanced Coding-Decoding","Advanced Syllogisms","Advanced Statement & Conclusion","Advanced Data Sufficiency","Complex Ordering & Scheduling","Analytical Reasoning","Multi-condition Logical Problems"]}
+};
+const flatTopics=Object.values(DATA).flatMap(s=>Object.values(s).flat()).filter((v,i,a)=>a.indexOf(v)===i);
+let state=JSON.parse(localStorage.getItem("aptiTrack")||"null")||{done:{},sessions:[],goal:180};
+let timerSeconds=0,timerInterval=null,timerRunning=false;
+
+function save(){localStorage.setItem("aptiTrack",JSON.stringify(state));renderAll()}
+function topicId(section,group,topic){return section+"|"+group+"|"+topic}
+function allTopicObjects(){let a=[];for(const [s,groups] of Object.entries(DATA))for(const [g,topics] of Object.entries(groups))for(const t of topics)a.push({s,g,t,id:topicId(s,g,t)});return a}
+const topics=allTopicObjects();
+
+function fmt(sec){let h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return `${h}h ${m}m${h===0&&m===0?` ${s}s`:''}`}
+function clockFmt(sec){return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(x=>String(x).padStart(2,"0")).join(":")}
+function dateKey(d=new Date()){return d.toISOString().slice(0,10)}
+function daySessions(key){return state.sessions.filter(x=>x.date===key).reduce((a,x)=>a+x.seconds,0)}
+function totalStudy(){return state.sessions.reduce((a,x)=>a+x.seconds,0)}
+function weekStudy(){let now=new Date(), start=new Date(now);start.setDate(now.getDate()-6);return state.sessions.filter(x=>new Date(x.date)>=new Date(start.toISOString().slice(0,10))).reduce((a,x)=>a+x.seconds,0)}
+function streak(){let n=0,d=new Date();while(daySessions(dateKey(d))>0){n++;d.setDate(d.getDate()-1)}return n}
+function sectionStats(s){let arr=topics.filter(x=>x.s===s),done=arr.filter(x=>state.done[x.id]).length;return {done,total:arr.length,pct:Math.round(done/arr.length*100)}}
+
+function renderDashboard(){
+let done=topics.filter(x=>state.done[x.id]).length,pct=Math.round(done/topics.length*100),today=daySessions(dateKey());
+document.getElementById("overallPct").textContent=pct+"%";document.getElementById("overallBar").style.width=pct+"%";
+document.getElementById("completedCount").textContent=`${done} / ${topics.length}`;document.getElementById("totalTime").textContent=fmt(totalStudy());document.getElementById("streak").textContent=streak()+" days";
+document.getElementById("todayTime").textContent=fmt(today);document.getElementById("goalText").textContent=fmt(state.goal*60);document.getElementById("todayBar").style.width=Math.min(100,today/(state.goal*60)*100)+"%";
+document.getElementById("subjectCards").innerHTML=Object.keys(DATA).map(s=>{let x=sectionStats(s);return `<div class="card subject" onclick="openSection('${s.replaceAll("'","\\'")}')"><h3>${s}</h3><div class="pct">${x.pct}%</div><div class="progress-wrap"><div class="progress" style="width:${x.pct}%"></div></div><div class="mini-progress">${x.done} / ${x.total} topics</div></div>`}).join("");
+}
+function renderSyllabus(){
+document.getElementById("syllabusContainer").innerHTML=Object.entries(DATA).map(([s,groups])=>`<div class="syllabus-section"><div class="section-title"><h2>${s}</h2><span>${sectionStats(s).done}/${sectionStats(s).total} completed</span></div>${Object.entries(groups).map(([g,ts])=>`<div class="topic-group"><div class="group-head">${g}</div>${ts.map(t=>{let id=topicId(s,g,t),d=!!state.done[id];return `<div class="topic ${d?'done':''}"><input type="checkbox" ${d?'checked':''} onchange="toggleTopic('${id.replaceAll("'","\\'")}')"><label>${t}</label></div>`}).join("")}</div>`).join("")}</div>`).join("");
+}
+function renderTimer(){
+document.getElementById("timerDisplay").textContent=clockFmt(timerSeconds);document.getElementById("startBtn").textContent=timerRunning?"Pause":"Start";
+let sel=document.getElementById("timerTopic");if(!sel.options.length)sel.innerHTML='<option value="">General Study</option>'+topics.map(x=>`<option value="${x.id}">${x.s} — ${x.t}</option>`).join("");
+let rows=state.sessions.slice().reverse().slice(0,10);document.getElementById("recentSessions").innerHTML=rows.length?rows.map(x=>`<div class="history-row"><div><b>${x.topic||"General Study"}</b><div class="stat-label">${x.date}</div></div><b>${fmt(x.seconds)}</b></div>`).join(""):'<div class="empty">No study sessions yet.</div>';
+}
+function renderProgress(){
+document.getElementById("pToday").textContent=fmt(daySessions(dateKey()));document.getElementById("pWeek").textContent=fmt(weekStudy());document.getElementById("pAll").textContent=fmt(totalStudy());document.getElementById("pGoal").textContent=fmt(state.goal*60);document.getElementById("goalInput").value=state.goal;
+document.getElementById("progressSections").innerHTML=Object.keys(DATA).map(s=>{let x=sectionStats(s);return `<div style="margin:16px 0"><div style="display:flex;justify-content:space-between"><b>${s}</b><span>${x.done}/${x.total} · ${x.pct}%</span></div><div class="progress-wrap"><div class="progress" style="width:${x.pct}%"></div></div></div>`}).join("");
+let d=new Date(),html="";for(let i=6;i>=0;i--){let q=new Date(d);q.setDate(d.getDate()-i);let k=dateKey(q);html+=`<div class="day ${daySessions(k)>0?'done':''}" title="${k}: ${fmt(daySessions(k))}">${q.toLocaleDateString('en',{weekday:'narrow'})}</div>`}document.getElementById("weekDays").innerHTML=html;
+}
+function renderAll(){renderDashboard();renderSyllabus();renderTimer();renderProgress()}
+function toggleTopic(id){state.done[id]=!state.done[id];save()}
+function openSection(s){showPage("syllabus");setTimeout(()=>{let el=[...document.querySelectorAll(".section-title h2")].find(x=>x.textContent===s);if(el)el.scrollIntoView({behavior:"smooth"})},50)}
+function showPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===id));document.getElementById("pageTitle").textContent={dashboard:"Dashboard",syllabus:"Syllabus Checklist",timer:"Study Timer",progress:"Progress"}[id];renderAll()}
+function toggleTimer(){if(timerRunning){clearInterval(timerInterval);timerRunning=false;renderTimer();return}timerRunning=true;timerInterval=setInterval(()=>{timerSeconds++;document.getElementById("timerDisplay").textContent=clockFmt(timerSeconds)},1000);renderTimer()}
+function stopTimer(){if(timerSeconds===0)return;clearInterval(timerInterval);timerRunning=false;let id=document.getElementById("timerTopic").value;let found=topics.find(x=>x.id===id);state.sessions.push({date:dateKey(),seconds:timerSeconds,topic:found?found.t:"General Study"});timerSeconds=0;save()}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSeconds=0;renderTimer()}
+function saveGoal(){let v=parseInt(document.getElementById("goalInput").value)||180;state.goal=Math.max(15,v);save()}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.getElementById("today").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+renderAll();
+</script>
+</body>
+</html>
